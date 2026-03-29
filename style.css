@@ -1,0 +1,492 @@
+/* style.css - 118 San Marino Manutenzione (Versione Completa) */
+
+:root {
+    --primary-color: #0055a5;
+    --secondary-color: #e30613;
+    --warning-color: #ffc107;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --bg-color: #f4f6f9;
+    --card-radius: 12px;
+}
+
+body { 
+    background-color: var(--bg-color); 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
+
+/* --- HEADER --- */
+.hero-header {
+    position: relative;
+    padding: 30px 0;
+    background: linear-gradient(135deg, #001c3a 0%, #4012ad 100%);
+    border-bottom: 5px solid var(--secondary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    overflow: visible;
+    z-index: 10;
+    min-height: 450px;
+}
+
+.hero-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.hero-content { 
+    position: relative; 
+    z-index: 2; 
+    text-align: center;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    width: 100%;
+}
+
+.main-title { 
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 800; 
+    font-size: 2.2rem; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    margin: 0; 
+    line-height: 1.1; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.sub-title { 
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 400; 
+    font-size: 1.1rem; 
+    opacity: 0.9; 
+    letter-spacing: 3px; 
+    margin-bottom: 5px;
+}
+
+/* --- SEARCH --- */
+.search-container {
+    margin-top: 25px;
+    width: 100%; 
+    max-width: 700px;
+    position: relative; 
+    z-index: 1000;
+}
+.search-box {
+    background: white; 
+    padding: 8px; 
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+    display: flex; 
+    align-items: center; 
+    border: 1px solid #ddd;
+}
+.search-input { 
+    border: none; 
+    flex-grow: 1; 
+    padding: 12px 20px; 
+    font-size: 1.1rem; 
+    outline: none; 
+    border-radius: 50px; 
+}
+.search-btn { 
+    border-radius: 50px; 
+    padding: 10px 30px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+}
+
+/* --- FLOTTA --- */
+.fleet-section { margin-top: 30px; position: relative; z-index: 5; padding-bottom: 20px; }
+.vehicle-card {
+    background: white; border-radius: var(--card-radius); padding: 20px 10px; text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s ease; cursor: pointer;
+    border-top: 4px solid transparent; height: 100%; position: relative;
+}
+.vehicle-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+.vehicle-card.automedica { border-top-color: #ffc107; }
+.vehicle-card.ambulanza { border-top-color: var(--secondary-color); }
+
+.card-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+.btn-action-card {
+    width: 32px; height: 32px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center;
+    background: #f8f9fa; color: #555; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-action-card:hover { background: var(--primary-color); color: white; }
+
+/* ALERT LAVAGGIO SU CARD */
+.wash-alert-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #dc3545;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #dc3545;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: pulse-red 2s infinite;
+    z-index: 20;
+    display: none; /* Hidden by default */
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.wash-alert-icon:hover {
+    transform: scale(1.1);
+    background: #ffe6e6;
+}
+
+.icon-wrapper { font-size: 2.2rem; margin-bottom: 10px; height: 50px; display: flex; align-items: center; justify-content: center; margin-top: 15px; }
+.icon-automedica { color: #ffc107; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.icon-ambulanza { color: var(--secondary-color); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+.vehicle-name { font-weight: 700; font-size: 1.1rem; color: #333; }
+.vehicle-plate { font-weight: 600; font-size: 0.95rem; color: #0055a5; margin-bottom: 2px; letter-spacing: 1px; }
+.vehicle-type { font-size: 0.8rem; color: #6c757d; text-transform: uppercase; }
+
+/* GESTIONE STATI VEICOLO */
+.status-text-display {
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-top: 8px;
+    min-height: 18px;
+}
+
+/* 1. OPERATIVA (Verde Statico) */
+.vehicle-card.stato-operativa { border: 2px solid #198754; background: #f0fff4; }
+.vehicle-card.stato-operativa .status-text-display { color: #198754; display: block; }
+
+/* 2. ATTESA (Arancione Lampeggiante) */
+.vehicle-card.stato-segnalato { background: #fffbf0; border: 2px solid #ffc107; }
+.vehicle-card.stato-segnalato .status-text-display { color: #d63384; animation: textPulse 2s infinite; display: block; color: #ffc107; text-shadow: 0 0 1px rgba(0,0,0,0.1); }
+
+/* 3. OFFICINA (Rosso Lampeggiante) */
+.vehicle-card.stato-officina { background: #fff5f5; border: 2px solid #dc3545; animation: pulse-border 2s infinite; }
+.vehicle-card.stato-officina .status-text-display { color: #dc3545; animation: textPulse 1s infinite; display: block; }
+
+@keyframes textPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+/* --- CARDS & SIDE LABELS --- */
+.operational-card { 
+    background: white; 
+    border-radius: var(--card-radius); 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+    border: none; 
+    overflow: hidden; 
+    margin-bottom: 20px;
+    position: relative; 
+    padding-right: 40px; 
+}
+
+.card-side-label {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg); 
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(192, 75, 7, 0);
+    font-size: 0.85rem;
+    z-index: 5;
+}
+
+.card-header-custom { padding: 15px 20px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
+.bg-gradient-blue { background: linear-gradient(135deg, #0055a5, #003366); color: white; }
+.bg-gradient-orange { background: linear-gradient(135deg, #ff9800, #e65100); color: white; }
+.bg-gradient-red { background: linear-gradient(135deg, #e30613, #a8040d); color: white; }
+
+.bg-side-orange { background: linear-gradient(to bottom, #ff9800, #e65100); }
+.bg-side-red { background: linear-gradient(to bottom, #e30613, #a8040d); }
+
+/* STYLE BOX APPUNTAMENTO VERDE */
+.box-appuntamento-ok {
+    background-color: #d1e7dd; 
+    border: 1px solid #198754;
+    color: #0f5132;
+}
+.box-appuntamento-ok .btn-outline-dark {
+    border-color: #0f5132;
+    color: #0f5132;
+}
+.box-appuntamento-ok .btn-outline-dark:hover {
+    background-color: #0f5132;
+    color: white;
+}
+
+/* UNIFORM TABLE STYLES */
+.table-custom-uniform tr td { font-size: 0.9rem; vertical-align: middle; }
+.table-custom-uniform strong { font-size: 0.95rem; }
+.table-custom-uniform .badge { font-weight: 600; }
+.table-custom-uniform .btn-sm { padding: 0.2rem 0.4rem; font-size: 0.8rem; }
+
+/* SEPARATOR WORK IN PROGRESS */
+.separator-container {
+    text-align: center;
+    margin: 30px 0 20px 0;
+    position: relative;
+    z-index: 1;
+}
+.separator-title {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #db0808; 
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+    background-color: var(--bg-color); 
+    padding: 0 15px;
+}
+.separator-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #e30613, transparent);
+    width: 80%;
+    margin: -14px auto 0 auto;
+    position: relative;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.hidden-section { display: none; }
+.info-label { font-size: 0.75rem; color: #6c757d; text-transform: uppercase; font-weight: 700; }
+
+#tabellaStoricoVeicolo tr td { padding-top: 15px; padding-bottom: 15px; border-bottom: 2px solid #dee2e6; }
+.modal-xl-custom { max-width: 90%; }
+
+/* --- CALENDARIO STYLE --- */
+.calendar-wrapper { padding: 15px; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.calendar-day-header { text-align: center; font-weight: bold; font-size: 0.8rem; color: #6c757d; padding: 5px; }
+.calendar-day { 
+    border: 1px solid #eee; min-height: 90px; padding: 5px; font-size: 0.9rem; position: relative; 
+    background: #fff; border-radius: 4px; cursor: pointer; transition: background-color 0.2s;
+    overflow: hidden; 
+}
+.calendar-day:hover { background-color: #f8f9fa; box-shadow: inset 0 0 0 1px #ddd; }
+.calendar-day.other-month { background: #f9f9f9; color: #ccc; cursor: default; }
+.calendar-day.today { border: 2px solid var(--primary-color); }
+
+.cal-event { 
+    font-size: 0.75rem; padding: 4px 6px; margin-bottom: 3px; border-radius: 4px; 
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+    cursor: pointer;
+    transition: transform 0.1s;
+    max-width: 100%;
+}
+.cal-event:hover { transform: scale(1.02); z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+.event-segnalazione { background: #cff4fc; color: #055160; border-left: 3px solid #0dcaf0; }
+.event-officina { background: #f8d7da; color: #721c24; border-left: 3px solid #dc3545; }
+.event-chiuso { background: #d4edda; color: #155724; border-left: 3px solid #28a745; }
+.event-nota { background: #e0cffc; color: #59359a; border-left: 3px solid #6f42c1; font-weight: 600; display: block; width: 100%; }
+.event-lavaggio-periodico { background: #d1ecf1; color: #0c6025; border-left: 3px solid #17a2b8; font-weight: bold; }
+
+.event-appuntamento {
+    background: #fff3cd; color: #000; font-weight: bold;
+    border: 2px solid #ffc107;
+    animation: flashWarning 2s infinite;
+}
+
+/* EVENTO RITIRO PREVISTO LAMPEGGIANTE */
+.event-ritiro-previsto {
+    background: #dc3545; 
+    color: white; 
+    font-weight: bold; 
+    border: 2px solid #a71d2a;
+    animation: flashRed 1.5s infinite;
+}
+
+@keyframes flashWarning {
+    0% { background-color: #fff3cd; box-shadow: 0 0 5px rgba(255, 193, 7, 0.5); }
+    50% { background-color: #ffe69c; box-shadow: 0 0 10px rgba(255, 193, 7, 0.8); }
+    100% { background-color: #fff3cd; box-shadow: 0 0 5px rgba(255, 193, 7, 0.5); }
+}
+
+@keyframes flashRed {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.02); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.detail-table th { width: 40%; background: #f8f9fa; color: #666; font-weight: 600; }
+
+/* STYLE SCHEDA GUASTO (UI Web) */
+.form-header-clean { text-align: center; padding-bottom: 20px; border-bottom: 2px solid #eee; margin-bottom: 20px; }
+.form-title-main { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--primary-color); text-transform: uppercase; margin-bottom: 5px; }
+.form-title-sub { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.4rem; color: #555; text-transform: uppercase; }
+
+/* --- PRINT STYLES --- */
+#modulo-stampa, #report-container { display: none; } 
+@media print {
+    body > * { display: none !important; } 
+    
+    #modulo-stampa { display: block !important; position: absolute; top: 0; left: 0; width: 100%; font-family: Arial, sans-serif; background: white; z-index: 9999; }
+    
+    .print-report-mode #report-container { display: block !important; position: absolute; top: 0; left: 0; width: 100%; font-family: Arial, sans-serif; background: white; z-index: 9999; }
+    .print-report-mode #modulo-stampa { display: none !important; }
+
+    @page { margin: 1cm; size: A4; }
+    .print-header-top { text-align: center; border-bottom: 1px solid transparent; margin-bottom: 20px; }
+    .print-header-note { font-size: 10pt; text-decoration: underline; margin-bottom: 15px; }
+    .print-logo-box { display: none; } 
+    .print-main-title { font-size: 16pt; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
+    .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 2px solid black; }
+    .print-table th, .print-table td { border: 1px solid black; padding: 5px; vertical-align: top; font-size: 11pt; }
+    .print-table th { background-color: #ddd !important; -webkit-print-color-adjust: exact; font-weight: bold; text-align: left; }
+    .sec-1-label { width: 25%; background: #eee; font-weight: bold; }
+    .sec-1-val { width: 25%; }
+    .print-row-flex { display: flex; gap: 15px; }
+    .print-col-half { width: 50%; }
+    .print-footer { text-align: center; font-size: 10pt; border-top: 1px solid black; padding-top: 5px; margin-top: 20px; }
+    .print-footer-bold { font-weight: bold; text-transform: uppercase; }
+    .print-revision { font-size: 8pt; text-align: right; margin-top: 5px; }
+    .empty-cell-h { height: 25px; }
+}
+
+@media (max-width: 768px) {
+    .search-container { width: 95%; }
+}
+
+.alert-board-item {
+    border-left: 5px solid;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.alert-board-item:hover { transform: scale(1.02); }
+
+.alert-guasto { border-color: var(--secondary-color); background: #fff5f5; }
+.alert-appuntamento-oggi { border-color: var(--warning-color); background: #fffbf0; border-width: 8px; animation: pulse-yellow 2s infinite; }
+.alert-appuntamento-domani { border-color: #17a2b8; background: #e0faff; }
+
+/* NUOVO STILE GIALLO FLUO PER RITIRO */
+.alert-ritiro-fluo { 
+    border-color: #d63384; 
+    background: #ccff00; 
+    color: black;
+    border-width: 5px; 
+    border-left-width: 10px;
+    animation: pulse-fluo 1s infinite alternate; 
+}
+
+.alert-ritiro-domani { border-color: #28a745; background: #d4edda; }
+
+@keyframes pulse-yellow {
+    0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+    70% { box-shadow: 0 0 0 5px rgba(255, 193, 7, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+}
+
+@keyframes pulse-fluo {
+    0% { background-color: #ccff00; box-shadow: 0 0 10px #ccff00; }
+    100% { background-color: #ddff55; box-shadow: 0 0 20px #ccff00; }
+}
+
+/* --- STILI REPORT --- */
+.report-header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid var(--primary-color); padding-bottom: 20px; }
+.report-logo-title { font-size: 24px; font-weight: 800; color: var(--primary-color); text-transform: uppercase; }
+.report-subtitle { font-size: 14px; color: #555; margin-top: 5px; }
+.report-meta { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 12px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.report-table th { background: #eee; text-align: left; padding: 8px; border: 1px solid #999; font-weight: bold; -webkit-print-color-adjust: exact; }
+.report-table td { padding: 8px; border: 1px solid #999; vertical-align: top; }
+.report-cat-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; border: 1px solid #ccc; display: inline-block; margin-bottom: 4px; }
+
+/* --- HEADER BUTTONS --- */
+.header-actions-container {
+    position: absolute; 
+    top: 25px; 
+    right: 30px; 
+    z-index: 101; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    align-items: flex-end;
+}
+
+.btn-header-custom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 200px; 
+    padding: 10px 20px;
+    border-radius: 150px; 
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 2px solid rgb(255, 251, 4); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25); 
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(4px);
+}
+
+.btn-header-custom i {
+    font-size: 1.2rem;
+    margin-right: 12px;
+    width: 24px;
+    text-align: center;
+}
+
+.btn-header-custom:hover {
+    transform: translateX(-8px) scale(1.02); 
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.8);
+    z-index: 110;
+}
+
+/* Colori specifici pulsanti */
+.btn-header-bacheca { background: #faf609; color: #000000; }
+.btn-header-lavaggio { background: #f8f9fa; color: #333; }
+.btn-header-gomme { background: #f8f9fa; color: #333; }
+.btn-header-rubrica { background: #f8f9fa; color: #333; }
+
+/* NUOVO PULSANTE EMAIL */
+.btn-header-email {
+    background: #f8f9fa; /* Verde Smeraldo */
+    color: color: #333;
+}
+.btn-header-email:hover {
+    background: #da0c0c; /* Verde Scuro */
+    color: white;
+    box-shadow: 0 8px 16px rgba(32, 201, 151, 0.4);
+}

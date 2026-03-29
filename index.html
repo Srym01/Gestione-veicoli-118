@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano manutenzione veicoli 118 San Marino</title>
+    
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='12' fill='%230055a5'/%3E%3Ccircle cx='32' cy='32' r='22' fill='white'/%3E%3Cpath d='M32 14v36M14 32h36' stroke='%23e30613' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M44 44l12 12' stroke='%23333' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="modulo-stampa">
+        <div class="print-header-top">
+            <div class="print-header-note">Il seguente modulo deve sempre restare in centrale operativa affisso in bacheca fino a pratica conclusa</div>
+            <div class="print-main-title">MODULO SEGNALAZIONE GUASTI<br>MANUTENZIONE AUTOMEZZI 118</div>
+        </div>
+        <table class="print-table">
+            <tr><th colspan="2" style="border-bottom: 2px solid black;">1. Riscontro del guasto</th><th style="border-bottom: 2px solid black; text-align: center;">Descrizione guasto</th></tr>
+            <tr><td class="sec-1-label">Data:</td><td class="sec-1-val" id="p-data"></td><td rowspan="5" style="vertical-align: top; padding: 10px;"><div id="p-cat" style="font-weight:bold; margin-bottom:5px;"></div><div id="p-descrizione" style="font-family: 'Courier New', monospace; font-size: 11pt;"></div></td></tr>
+            <tr><td class="sec-1-label">Falco:</td><td class="sec-1-val" id="p-falco" style="font-weight: bold;"></td></tr>
+            <tr><td class="sec-1-label">Km:</td><td class="sec-1-val" id="p-targa"></td></tr>
+            <tr><td class="sec-1-label">Operatore:</td><td class="sec-1-val" id="p-operatore"></td></tr>
+            <tr><td class="sec-1-label">Turno:</td><td class="sec-1-val"></td></tr>
+        </table>
+        <div class="print-row-flex">
+            <div class="print-col-half"><table class="print-table"><tr><th colspan="2" style="border-bottom: 2px solid black;">2. Appuntamento riparazione</th></tr><tr><td class="sec-1-label">Officina:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label">Data:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label">Ora:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label">Operatore:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label">Op che consegna:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label" style="height: 50px;">Note:</td><td></td></tr></table></div>
+            <div class="print-col-half"><table class="print-table"><tr><th colspan="2" style="border-bottom: 2px solid black;">3. Invio e-mail informativa in amministrazione (sempre necessaria)</th></tr><tr><td class="sec-1-label">Data:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label">Operatore:</td><td class="empty-cell-h"></td></tr><tr><td class="sec-1-label" rowspan="2">Preventivo:</td><td style="text-align: center; height: 25px;">si &nbsp;&nbsp;|&nbsp;&nbsp; no</td></tr><tr><td style="text-align: center; height: 25px;">+2.600€ &nbsp;|&nbsp; -2.600€</td></tr><tr><td colspan="2" style="font-size: 8pt; font-style: italic;">Se la somma è superiore a 2.600€ attendere l'autorizzazione prima di procedere con la riparazione</td></tr><tr><td class="sec-1-label">Data autorizzazione:</td><td class="empty-cell-h"></td></tr></table></div>
+        </div>
+        <table class="print-table"><tr><th colspan="2" style="border-bottom: 2px solid black;">4. Ritiro del veicolo</th><th style="border-bottom: 2px solid black; text-align: center;">Descrizione intervento</th></tr><tr><td class="sec-1-label">Data:</td><td class="sec-1-val empty-cell-h"></td><td rowspan="5" style="vertical-align: top;"></td></tr><tr><td class="sec-1-label">Ora:</td><td class="sec-1-val empty-cell-h"></td></tr><tr><td class="sec-1-label">Km:</td><td class="sec-1-val empty-cell-h"></td></tr><tr><td class="sec-1-label">Operatore:</td><td class="sec-1-val empty-cell-h"></td></tr><tr><td class="sec-1-label">Op ritiro:</td><td class="sec-1-val empty-cell-h"></td></tr></table>
+        <div class="print-footer"><div class="print-footer-bold">AGGIORNARE SEMPRE IL RISPETTIVO FILE EXCEL "STORICO MANUTENZIONI"</div><div class="print-revision">Ultima revisione 23/09/25</div></div>
+    </div>
+
+    <div id="report-container">
+        <div class="report-header">
+            <div class="report-logo-title">118 SAN MARINO SOCCORSO</div>
+            <div class="report-subtitle">Report Storico Manutenzioni Selezionate</div>
+        </div>
+        <div class="report-meta">
+            <div><strong>Veicolo:</strong> <span id="rep-veicolo"></span></div>
+            <div><strong>Data Report:</strong> <span id="rep-data"></span></div>
+            <div><strong>Totale Interventi:</strong> <span id="rep-totale"></span></div>
+        </div>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th width="15%">Data</th>
+                    <th width="15%">Categoria</th>
+                    <th width="25%">Problema Segnalato</th>
+                    <th width="15%">Officina</th>
+                    <th width="30%">Intervento Eseguito / Note</th>
+                </tr>
+            </thead>
+            <tbody id="rep-body"></tbody>
+        </table>
+        <div style="margin-top: 30px; font-size: 11px; text-align: center; color: #666;">
+            Documento generato automaticamente dal gestionale "Piano Manutenzione Veicoli 118"
+        </div>
+    </div>
+
+    <div class="hero-header">
+        <div class="header-actions-container">
+            <button class="btn btn-header-custom btn-header-bacheca" onclick="checkAvvisiCritici(true)">
+                <i class="fas fa-bell"></i> Bacheca Avvisi
+            </button>
+            <button class="btn btn-header-custom btn-header-lavaggio" onclick="apriModalLavaggio()">
+                <i class="fas fa-shower"></i> Lavaggio Veicoli
+            </button>
+            <button class="btn btn-header-custom btn-header-gomme" onclick="apriModalGommeGlobal()">
+                <i class="fas fa-compact-disc"></i> Cambio Gomme
+            </button>
+             <button class="btn btn-header-custom btn-header-rubrica" onclick="apriRubrica()">
+                <i class="fas fa-address-book text-primary"></i> Rubrica Officine
+            </button>
+            <button class="btn btn-header-custom btn-header-email" onclick="apriModalEmailMultiscelto()">
+                <i class="fas fa-envelope"></i> Email
+            </button>
+
+            <button class="btn btn-header-custom btn-light fw-bold" data-bs-toggle="modal" data-bs-target="#modalManualeUtente" style="color: #0055a5;">
+                <i class="fas fa-book me-2"></i> MANUALE
+            </button>
+        </div>
+
+        <div class="hero-content">
+            <div style="height: 30px;"></div>
+            <h1 class="main-title">Piano Manutenzione Veicoli</h1>
+            <h2 class="sub-title">118 SAN MARINO SOCCORSO</h2>
+            <div class="mt-2 badge bg-white text-dark bg-opacity-75 shadow-sm">
+                <i class="fas fa-clock me-2"></i><span id="orologio">--:--:--</span>
+            </div>
+            <div class="mt-1 text-white-50 small" style="cursor:help; user-select:none;" onclick="triggerEasterEgg()">
+                <i class="fas fa-database me-1"></i> Database Attivo
+            </div>
+        </div>
+        
+        <div class="search-container no-print mx-auto">
+            <div class="search-box">
+                <i class="fas fa-search text-primary ms-3"></i>
+                <input type="text" class="search-input" id="globalSearchInput" placeholder="Cerca storico (data, officina, guasto, operatore)...">
+                <button class="btn btn-primary search-btn" onclick="apriOpzioniRicerca()">CERCA</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container fleet-section">
+        <div class="row g-3 justify-content-center">
+            <script>
+                const targhe = { 'Falco 27': 'L0605', 'Falco 28': 'M1441', 'Falco 29': 'P2217', 'Falco 30': 'P8106', 'Falco 31': 'S0670' };
+                const veicoli = ['Falco 27', 'Falco 28', 'Falco 29', 'Falco 30', 'Falco 31'];
+                veicoli.forEach(v => {
+                    const id = v.replace(' ', '');
+                    const type = v === 'Falco 27' ? 'Automedica' : 'Ambulanza';
+                    const iconClass = v === 'Falco 27' ? 'fa-car-side icon-automedica' : 'fa-truck-medical icon-ambulanza';
+                    const cardClass = v === 'Falco 27' ? 'automedica' : 'ambulanza';
+                    document.write(`<div class="col-6 col-md-2"><div class="vehicle-card ${cardClass} stato-operativa" id="card-${id}"><div class="wash-alert-icon" id="wash-alert-${id}" title="Lavaggio richiesto ( > 30 giorni)" onclick="event.stopPropagation(); apriModalLavaggio('${v}')"><i class="fas fa-shower"></i></div><div class="card-actions no-print"></div><div onclick="apriStorico('${v}')"><div class="icon-wrapper"><i class="fas ${iconClass}"></i></div><div class="vehicle-name">${v}</div><div class="vehicle-plate">${targhe[v]}</div><div class="vehicle-type">${type}</div><div class="status-text-display" id="status-text-${id}">OPERATIVA</div></div></div></div>`);
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="operational-card h-100" id="area-stampabile" style="padding-right: 0 !important;">
+                    <div class="form-header-clean pt-4 px-3">
+                        <div class="form-title-main">Segnalazione Guasto</div>
+                        <div class="form-title-sub">Scheda di Intervento Tecnico</div>
+                    </div>
+                    <div class="card-body p-4 pt-0">
+                        <form id="formGuasto">
+                            <div class="mb-3"><label class="info-label">Veicolo</label><select class="form-select fw-bold" id="mezzoSelect"><option value="Falco 27">Falco 27 (Automedica)</option><option value="Falco 28">Falco 28 (Ambulanza)</option><option value="Falco 29">Falco 29 (Ambulanza)</option><option value="Falco 30">Falco 30 (Ambulanza)</option><option value="Falco 31">Falco 31 (Ambulanza)</option></select></div>
+                            <div class="row"><div class="col-6 mb-3"><label class="info-label">Km Attuali</label><input type="number" class="form-control" id="kmAttuali"></div><div class="col-6 mb-3"><label class="info-label">Data Segnalazione</label><div class="form-control border-0 p-0" id="data-stampa-display"></div></div></div>
+                            <div class="mb-3"><label class="info-label">Operatore Segnalante</label><input type="text" class="form-control" id="operatore"></div>
+                            
+                            <div class="mb-3">
+                                <label class="info-label">Categoria Guasto</label>
+                                <select class="form-select" id="categoriaGuasto">
+                                    <option value="" selected class="text-muted">- Rilevamento Automatico -</option>
+                                    <option value="Meccanica">Meccanica (Motore, Freni, etc)</option>
+                                    <option value="Elettrica">Elettrica (Batteria, Luci, Sirene)</option>
+                                    <option value="Carrozzeria">Carrozzeria</option>
+                                    <option value="Pneumatici">Pneumatici</option>
+                                    <option value="Sanitaria">Attrezzatura Sanitaria</option>
+                                    <option value="Altro">Altro / Generico</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3"><label class="info-label">Problema Riscontrato</label><textarea class="form-control" id="descrizione" rows="4"></textarea></div>
+                            
+                            <div class="mb-3 border-top pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkInviaEmail" onchange="toggleEmailInput()">
+                                    <label class="form-check-label small fw-bold text-primary" for="checkInviaEmail">
+                                        <i class="fas fa-envelope me-1"></i> Invia email a tutti gli operatori
+                                    </label>
+                                </div>
+                                <div id="divEmailDestinatari" class="mt-2" style="display:none;">
+                                    <label class="info-label">Email Destinatari</label>
+                                    <input type="text" class="form-control form-control-sm" id="emailDestinatari" value="barbieri.matteo.1993@gmail.com,pilu.bera97@gmail.com,msarti@omniway.sm,nicofabbrism@gmail.com,filippovolpini83@gmail.com,pazz9@hotmail.com,ymichelotti@hotmail.it,ste200560@gmail.com">
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4 no-print"><button type="button" class="btn btn-outline-secondary" onclick="preparaStampa()"><i class="fas fa-print"></i> Stampa Scheda</button><button type="button" class="btn btn-warning fw-bold" onclick="creaSegnalazione()"><i class="fas fa-exclamation-triangle"></i> APRI SEGNALAZIONE</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="operational-card no-print" style="padding-right: 0 !important;">
+                    <div class="card-header-custom bg-white text-dark border-bottom"><span>Planning Manutenzioni</span><div><button class="btn btn-sm btn-outline-secondary" onclick="cambiaMese(-1)"><i class="fas fa-chevron-left"></i></button><span id="calendar-month-year" class="mx-2 fw-bold text-uppercase"></span><button class="btn btn-sm btn-outline-secondary" onclick="cambiaMese(1)"><i class="fas fa-chevron-right"></i></button></div></div>
+                    <div class="card-body p-0 calendar-wrapper">
+                        <div class="calendar-grid mb-2"><div class="calendar-day-header">LUN</div><div class="calendar-day-header">MAR</div><div class="calendar-day-header">MER</div><div class="calendar-day-header">GIO</div><div class="calendar-day-header">VEN</div><div class="calendar-day-header">SAB</div><div class="calendar-day-header text-danger">DOM</div></div>
+                        <div id="calendar-days" class="calendar-grid"></div>
+                        <div class="mt-3 small d-flex gap-3 justify-content-center flex-wrap"><span class="d-flex align-items-center"><span class="badge bg-info text-dark me-1">Blu</span> Segnalazione</span><span class="d-flex align-items-center"><span class="badge bg-warning text-dark border border-dark me-1" style="animation: none;">Giallo</span> Appuntamento</span><span class="d-flex align-items-center"><span class="badge bg-danger me-1">Rosso</span> In Officina</span><span class="d-flex align-items-center"><span class="badge bg-success me-1">Verde</span> Concluso</span><span class="d-flex align-items-center"><span class="badge me-1" style="background: #e0cffc; color: #59359a; border: 1px solid #6f42c1;">Viola</span> Note</span><span class="d-flex align-items-center"><span class="badge bg-danger border border-white me-1" style="animation: flashRed 1.5s infinite;">Rosso Lamp.</span> Ritiro Previsto</span></div>
+                    </div>
+                </div>
+
+                <div class="separator-container no-print">
+                    <div class="separator-title">WORK IN PROGRESS</div>
+                    <div class="separator-line"></div>
+                </div>
+
+                <div class="operational-card hidden-section" id="card-segnalati">
+                    <div class="card-side-label bg-side-orange">RICHIESTE IN ATTESA</div>
+                    <div class="card-header-custom bg-gradient-orange"><span><i class="fas fa-clipboard-list me-2"></i>Richieste Manutenzione (Attesa)</span><span class="badge bg-white text-dark rounded-pill" id="badge-segnalati">0</span></div>
+                    <div class="card-body p-0"><table class="table table-hover align-middle mb-0 table-custom-uniform"><thead class="table-light"><tr><th>Veicolo/Guasto</th><th>Stato / Appuntamento</th><th class="text-end" style="min-width: 170px;"></th></tr></thead><tbody id="lista-segnalati"></tbody></table></div>
+                </div>
+                
+                <div class="operational-card hidden-section" id="card-officina">
+                    <div class="card-side-label bg-side-red">MEZZI IN OFFICINA</div>
+                    <div class="card-header-custom bg-gradient-red"><span><i class="fas fa-tools me-2"></i>Mezzi in Officina (Attivi)</span><span class="badge bg-white text-danger rounded-pill" id="badge-officina">0</span></div>
+                    <div class="card-body p-0"><table class="table table-hover align-middle mb-0 table-custom-uniform"><thead class="table-light"><tr><th>Veicolo/Destinazione/Problema</th><th>Presa in Carico</th><th>Consegna Stimata</th><th class="text-end" style="min-width: 170px;"></th></tr></thead><tbody id="lista-officina"></tbody></table></div>
+                </div>
+
+                <div id="msg-tutto-ok" class="text-center p-5 text-muted mt-5"><i class="fas fa-check-circle fa-4x text-success mb-3 opacity-50"></i><h4 class="fw-light">Tutti i veicoli sono operativi</h4><p>Nessuna segnalazione attiva.</p></div>
+                <div class="text-center mt-5 no-print"><button class="btn btn-sm btn-outline-secondary" onclick="apriOpzioniDati()"><i class="fas fa-cog me-1"></i> Opzioni Dati (Backup/Ripristino)</button><p class="small text-muted mt-2">Versione 11.02 - Fluo Dash & Audio Alerts</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEasterEgg" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-body p-0" style="background: black;">
+                    <div class="minigame-container">
+                        <div class="text-center py-3 bg-white text-black fw-bold">TROVA L'UOMO PELATO!</div>
+                        <div id="game-grid" class="game-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAvvisiIniziali" tabindex="-1" data-bs-backdrop="static"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header bg-danger text-white"><h5 class="modal-title fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>BACHECA AVVISI / CONSEGNE</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body bg-light"><div id="alert-appuntamenti-container" class="mb-4" style="display:none;"><h6 class="text-uppercase fw-bold text-dark border-bottom pb-2 mb-3">📅 Promemoria Appuntamenti & Ritiri</h6><div id="lista-alert-appuntamenti"></div></div><div id="alert-guasti-container" style="display:none;"><h6 class="text-uppercase fw-bold text-dark border-bottom pb-2 mb-3">⚠️ Guasti Segnalati (Mezzi in sede)</h6><div id="lista-alert-guasti"></div></div><div id="no-alerts-msg" class="text-center py-4 text-muted" style="display:none;"><i class="fas fa-check-circle fa-3x text-success mb-3"></i><h5>Nessun avviso critico.</h5><p>Buon lavoro!</p></div></div><div class="modal-footer"><button type="button" class="btn btn-dark w-100 fw-bold" data-bs-dismiss="modal">HO PRESO VISIONE</button></div></div></div></div>
+
+    <div class="modal fade" id="modalDettaglioCalendario" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white"><h5 class="modal-title fw-bold" id="titoloDettaglioCal">Dettagli Evento</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-0"><div id="contenutoDettaglioCal" class="p-3"></div></div><div class="modal-footer bg-light p-2"><button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Chiudi</button></div></div></div></div>
+
+    <div class="modal fade" id="modalNoteGiornaliere" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e0cffc; color: #59359a;">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-sticky-note me-2"></i>Agenda Giornaliera</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-center mb-3 text-uppercase fw-bold text-muted" id="titolo-modal-note">DATA</h6>
+                    <input type="hidden" id="note-data-corrente">
+                    <div id="lista-note-giorno" class="mb-3"></div>
+                    <hr>
+                    <label class="form-label small fw-bold text-muted">Aggiungi nuova nota/promemoria:</label>
+                    <div class="mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="checkEmailNota" onchange="toggleEmailNotaInput()">
+                            <label class="form-check-label small fw-bold text-primary" for="checkEmailNota">
+                                <i class="fas fa-envelope me-1"></i> Invia email a tutti
+                            </label>
+                        </div>
+                        <div id="divEmailDestinatariNota" class="mt-1" style="display:none;">
+                            <input type="text" class="form-control form-control-sm" id="emailDestinatariNota" value="barbieri.matteo.1993@gmail.com,pilu.bera97@gmail.com,msarti@omniway.sm,nicofabbrism@gmail.com,filippovolpini83@gmail.com" placeholder="Email separati da virgola">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="input-nuova-nota" placeholder="Es. Visita Tecnici, Controllo Bombole...">
+                        <button class="btn btn-primary" onclick="aggiungiNota()"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAppuntamento" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title fw-bold">📅 Gestione Appuntamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Appuntamento per il mezzo <strong><span id="app-mezzo"></span></strong></p>
+                    <input type="hidden" id="app-id-ticket">
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label info-label">Data</label><input type="date" class="form-control fw-bold" id="app-data"></div>
+                        <div class="col-md-6"><label class="form-label info-label">Ora (es. 09:30)</label><input type="time" class="form-control fw-bold" id="app-ora"></div>
+                        <div class="col-12"><label class="form-label info-label">Presso quale Officina?</label><input type="text" class="form-control" id="app-officina" placeholder="Es. Officina Meccanica Rossi"></div>
+                        <div class="col-12"><label class="form-label info-label">Chi ha preso l'appuntamento? (Operatore)</label><input type="text" class="form-control" id="app-operatore" placeholder="Nome cognome"></div>
+                        <div class="col-12"><label class="form-label info-label">Note Aggiuntive</label><textarea class="form-control" id="app-note" rows="2" placeholder="Note per il calendario (es. Portare libretto)"></textarea></div>
+                        <div class="col-12 mt-3 pt-2 border-top">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="app-salva-pc" checked>
+                                <label class="form-check-label fw-bold small text-primary" for="app-salva-pc">
+                                    <i class="fas fa-calendar-plus me-1"></i> Salva anche nel calendario del PC (Outlook/Google)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-dark" onclick="salvaAppuntamento()">Conferma Appuntamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalInviaOfficina" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title fw-bold">Invio Mezzo in Officina</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Stai inviando <strong id="invio-nome-mezzo"></strong></p>
+                    <input type="hidden" id="invio-id-ticket">
+                    <div class="mb-3">
+                        <label class="info-label">Officina Destinazione</label>
+                        <input type="text" class="form-control" id="invio-officina" placeholder="Es. Rossi Meccanica">
+                    </div>
+                    <div class="mb-3">
+                        <label class="info-label">Portato da (Operatore)</label>
+                        <input type="text" class="form-control" id="invio-operatore" placeholder="Nome Cognome">
+                    </div>
+                    
+                    <div class="row border-top pt-3 mt-3 bg-light rounded pb-2 mx-1">
+                        <div class="col-12 mb-2"><h6 class="small text-muted fw-bold text-uppercase">Informazioni Aggiuntive (Facoltative)</h6></div>
+                        <div class="col-6">
+                             <label class="info-label">Data Prevista Ritiro</label>
+                             <input type="date" class="form-control form-control-sm" id="invio-data-prevista">
+                        </div>
+                        <div class="col-12 mt-2">
+                             <label class="info-label">Note Officina (Visibili sotto il problema)</label>
+                             <textarea class="form-control form-control-sm" id="invio-note-officina" rows="2" placeholder="Es. Attesa ricambi, Motore smontato..."></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-dark" onclick="confermaIngressoOfficina()">Conferma Invio</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalUpdateNoteOfficina" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title fw-bold">Aggiorna Stato Officina</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="update-note-id">
+                    <p>Aggiorna informazioni per: <strong id="update-note-mezzo"></strong></p>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="info-label fw-bold text-primary">Data Stimata Ritiro</label>
+                            <input type="date" class="form-control" id="update-note-data">
+                        </div>
+                        <div class="col-6">
+                            <label class="info-label fw-bold text-primary">Ora Stimata</label>
+                            <input type="time" class="form-control" id="update-note-ora">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="info-label fw-bold text-dark">Storico Note Officina</label>
+                        <div id="lista-note-officina-modal" class="mb-2 bg-light p-2 rounded border" style="max-height: 250px; overflow-y: auto; font-size: 0.9rem;">
+                            <div class="text-center text-muted small fst-italic py-2">Nessuna nota presente.</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="info-label fw-bold text-success">Aggiungi Nuova Nota</label>
+                        <textarea class="form-control border-success" id="update-note-text" rows="3" placeholder="Scrivi qui per aggiungere una nuova nota al diario..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-info fw-bold text-white" onclick="salvaNoteOfficina()">Salva Modifiche</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalLavaggio" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-shower me-2"></i>Registrazione Lavaggio</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formLavaggio">
+                        <div class="mb-3">
+                            <label class="info-label">Veicolo</label>
+                            <select class="form-select fw-bold" id="lavaggio-mezzo">
+                                <option value="Falco 27">Falco 27 (Automedica)</option>
+                                <option value="Falco 28">Falco 28 (Ambulanza)</option>
+                                <option value="Falco 29">Falco 29 (Ambulanza)</option>
+                                <option value="Falco 30">Falco 30 (Ambulanza)</option>
+                                <option value="Falco 31">Falco 31 (Ambulanza)</option>
+                            </select>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="info-label">Data</label><input type="date" class="form-control" id="lavaggio-data"></div>
+                            <div class="col-md-6"><label class="info-label">Ora</label><input type="time" class="form-control" id="lavaggio-ora"></div>
+                            <div class="col-12">
+                                <label class="info-label">Tipo di Lavaggio</label>
+                                <select class="form-select" id="lavaggio-tipo">
+                                    <option value="Esterno">Solo Esterno</option>
+                                    <option value="Interno">Solo Interno</option>
+                                    <option value="Completo" selected>Completo (Int + Est)</option>
+                                    <option value="Sanificazione">Sanificazione Approfondita</option>
+                                </select>
+                            </div>
+                            <div class="col-12"><label class="info-label">Operatore</label><input type="text" class="form-control" id="lavaggio-operatore" placeholder="Chi ha lavato il mezzo?"></div>
+                            <div class="col-12"><label class="info-label">Note</label><textarea class="form-control" id="lavaggio-note" rows="2" placeholder="Eventuali note..."></textarea></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light justify-content-between">
+                    <button type="button" class="btn btn-outline-dark fw-bold" onclick="apriStoricoLavaggi()"><i class="fas fa-history me-2"></i>VEDI STORICO LAVAGGI</button>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="button" class="btn btn-info fw-bold text-white" onclick="salvaLavaggio()">Registra Lavaggio</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalStoricoLavaggi" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-list me-2"></i>Storico Completo Lavaggi</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table table-striped table-hover mb-0 align-middle">
+                        <thead class="table-light sticky-top"><tr><th>Data</th><th>Veicolo</th><th>Tipo</th><th>Operatore</th><th>Note</th><th></th></tr></thead>
+                        <tbody id="tabellaStoricoLavaggi"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer bg-light"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalCambioGomme" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title fw-bold">Registrazione Cambio Gomme</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formGomme">
+                        <div class="mb-3">
+                            <label class="info-label">Veicolo</label>
+                            <select class="form-select fw-bold" id="gomme-veicolo-select">
+                                <option value="Falco 27">Falco 27 (Automedica)</option>
+                                <option value="Falco 28">Falco 28 (Ambulanza)</option>
+                                <option value="Falco 29">Falco 29 (Ambulanza)</option>
+                                <option value="Falco 30">Falco 30 (Ambulanza)</option>
+                                <option value="Falco 31">Falco 31 (Ambulanza)</option>
+                            </select>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="info-label">Tipo</label>
+                                <select class="form-select" id="gomme-tipo">
+                                    <option value="Nuove (Estive)">Gomme NUOVE (Estive)</option>
+                                    <option value="Nuove (Invernali)">Gomme NUOVE (Invernali)</option>
+                                    <option value="Nuove (4 Stagioni)">Gomme NUOVE (4 Stagioni)</option>
+                                    <option value="Cambio Stagionale (Inv->Est)">Cambio Stagionale (Inv->Est)</option>
+                                    <option value="Cambio Stagionale (Est->Inv)">Cambio Stagionale (Est->Inv)</option>
+                                    <option value="Inversione">Inversione</option>
+                                    <option value="Riparazione">Riparazione gomma</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6"><label class="info-label">Km</label><input type="number" class="form-control" id="gomme-km"></div>
+                            <div class="col-12"><label class="info-label">Gommista</label><input type="text" class="form-control" id="gomme-officina"></div>
+                            <div class="col-12"><label class="info-label">Note</label><textarea class="form-control" id="gomme-note" rows="3"></textarea></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-dark fw-bold" onclick="salvaCambioGomme()">Registra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEmailMultiscelto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-envelope-open-text me-2"></i>Invia Email</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">Seleziona i destinatari (uno o più):</p>
+                    <form id="formEmailSelezione">
+                        <div class="list-group">
+                            <label class="list-group-item d-flex gap-2">
+                                <input class="form-check-input flex-shrink-0" type="checkbox" value="autisti" checked>
+                                <span>
+                                    <strong>Autisti Soccorritori</strong>
+                                    <small class="d-block text-muted">Comunicazioni interne,</small>
+                                </span>
+                            </label>
+                            <label class="list-group-item d-flex gap-2">
+                                <input class="form-check-input flex-shrink-0" type="checkbox" value="direzione">
+                                    <span>
+                                        <strong>Dirigenza Pronto Soccorso</strong>
+                                        <small class="d-block text-muted">Segnalazioni ufficiali</small>
+                                    </span>
+                            </label>
+                            <label class="list-group-item d-flex gap-2">
+                                <input class="form-check-input flex-shrink-0" type="checkbox" value="economato">
+                                    <span>
+                                        <strong>Ufficio Economato</strong>
+                                        <small class="d-block text-muted">Segnalazioni ufficiali</small>
+                                    </span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-success fw-bold" onclick="generaEmailMultiscelto()">
+                        <i class="fas fa-paper-plane me-2"></i>Crea Bozza Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalRubrica" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-secondary text-white"><h5 class="modal-title fw-bold"><i class="fas fa-address-book me-2"></i>Rubrica Officine</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="input-group mb-3"><span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span><input type="text" id="cercaRubrica" onkeyup="filtraRubrica()" class="form-control border-start-0" placeholder="Cerca officina..."></div><ul class="list-group list-group-flush" id="listaRubrica"><li class="list-group-item d-flex justify-content-between align-items-center py-3"><span class="fw-bold">Menicucci</span><a href="tel:0549900043" class="btn btn-sm btn-outline-success rounded-pill fw-bold"><i class="fas fa-phone me-1"></i> 0549 900043</a></li><li class="list-group-item d-flex justify-content-between align-items-center py-3"><span class="fw-bold">Reggini</span><a href="tel:0549909164" class="btn btn-sm btn-outline-success rounded-pill fw-bold"><i class="fas fa-phone me-1"></i> 0549 909164</a></li><li class="list-group-item d-flex justify-content-between align-items-center py-3"><span class="fw-bold">Autoplanet</span><a href="tel:0549911349" class="btn btn-sm btn-outline-success rounded-pill fw-bold"><i class="fas fa-phone me-1"></i> 0549 911349</a></li><li class="list-group-item d-flex justify-content-between align-items-center py-3"><span class="fw-bold">Cesarini Elettrauto</span><a href="tel:0549902110" class="btn btn-sm btn-outline-success rounded-pill fw-bold"><i class="fas fa-phone me-1"></i> 0549 902110</a></li><li class="list-group-item d-flex justify-content-between align-items-center py-3"><span class="fw-bold">Titan Gomme</span><a href="tel:0549903464" class="btn btn-sm btn-outline-success rounded-pill fw-bold"><i class="fas fa-phone me-1"></i> 0549 903464</a></li><li class="list-group-item d-flex justify-content-between align-items-center py-3"><span class="fw-bold">Vision Ambulanze</span><a href="tel:051727245" class="btn btn-sm btn-outline-success rounded-pill fw-bold"><i class="fas fa-phone me-1"></i> 051 727245</a></li></ul></div></div></div></div>
+    
+    <div class="modal fade" id="modalChiusura" tabindex="-1" data-bs-backdrop="static"><div class="modal-dialog"><div class="modal-content border-0 shadow"><div class="modal-header bg-success text-white"><h5 class="modal-title">Ritiro Mezzo</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="alert alert-light border text-center mb-3">Chiusura: <strong id="chiusura-mezzo" class="text-success"></strong></div><input type="hidden" id="chiusura-id-ticket"><div class="mb-3"><label class="info-label">Intervento</label><textarea class="form-control" id="intervento-eseguito" rows="3"></textarea></div><div class="mb-3"><label class="info-label">Ritirato da</label><input type="text" class="form-control" id="operatore-ritiro"></div></div><div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Annulla</button><button type="button" class="btn btn-success" onclick="salvaChiusura()">Salva</button></div></div></div></div>
+    
+    <div class="modal fade" id="modalPassword" tabindex="-1"><div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content"><div class="modal-header bg-warning"><h6 class="modal-title fw-bold">Modifica Protetta</h6><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="password" class="form-control text-center" id="passwordInput" placeholder="Password"><input type="hidden" id="password-id-record"><input type="hidden" id="password-mezzo"></div><div class="modal-footer justify-content-center p-1"><button type="button" class="btn btn-dark w-100" onclick="verificaPassword()">Conferma</button></div></div></div></div>
+    
+    <div class="modal fade" id="modalStorico" tabindex="-1">
+        <div class="modal-dialog modal-xl-custom modal-dialog-scrollable mx-auto my-4">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white"><h5 class="modal-title" id="titoloModal">Storico</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="p-3 bg-light border-bottom"><div class="row g-2 align-items-center"><div class="col-md-3"><select class="form-select form-select-sm" id="filtroStoricoCat" onchange="applicaFiltriStorico()"><option value="">Tutte le Categorie</option><option value="Meccanica">Meccanica</option><option value="Elettrica">Elettrica</option><option value="Carrozzeria">Carrozzeria</option><option value="Pneumatici">Pneumatici</option><option value="Sanitaria">Sanitaria</option><option value="Altro">Altro</option></select></div><div class="col-md-3"><input type="text" class="form-control form-control-sm" id="filtroStoricoTesto" placeholder="Cerca nel testo..." onkeyup="applicaFiltriStorico()"></div><div class="col-md-6 text-end"><button class="btn btn-sm btn-outline-dark me-2" onclick="toggleSelezioneTutti()">Seleziona/Deseleziona Tutti</button></div></div></div>
+                <div class="modal-body p-0"><input type="hidden" id="storico-veicolo-corrente"><table class="table table-striped table-hover mb-0 align-middle table-sm"><thead class="table-light sticky-top"><tr><th style="width: 5%" class="text-center"><i class="fas fa-check-square"></i></th><th style="width: 25%">1. Apertura / Categoria</th><th style="width: 30%">2. Gestione</th><th style="width: 30%">3. Chiusura</th><th style="width: 10%" class="text-center">Azioni</th></tr></thead><tbody id="tabellaStoricoVeicolo"></tbody></table></div>
+                
+                <div class="modal-footer bg-light justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    
+                    <button type="button" class="btn btn-outline-success fw-bold" onclick="apriInserimentoPassato()">
+                        <i class="fas fa-plus-circle me-1"></i> AGGIUNGI INTERVENTO
+                    </button>
+                    
+                    <button type="button" class="btn btn-primary fw-bold" onclick="generaReportSelezionati()">
+                        <i class="fas fa-file-pdf me-2"></i>CREA REPORT SELEZIONATI
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modalModificaTicket" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white"><h5 class="modal-title fw-bold">✏️ Modifica Guasto Segnalato</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="edit-ticket-id"><div class="mb-3"><label class="info-label">Descrizione Problema Aggiornata</label><textarea class="form-control" id="edit-ticket-desc" rows="4"></textarea></div></div><div class="modal-footer d-flex justify-content-between"><button type="button" class="btn btn-danger" onclick="annullaTicket()">Elimina Segnalazione</button><div><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button><button type="button" class="btn btn-primary" onclick="salvaModificaTicket()">Salva Modifiche</button></div></div></div></div></div>
+    
+    <div class="modal fade" id="modalSceltaRicerca" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-primary text-white"><h5 class="modal-title">Ricerca Storico</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>Dove vuoi cercare "<strong><span id="testoRicercaDisplay"></span></strong>"?</p><div class="d-grid gap-2"><button class="btn btn-outline-primary fw-bold" onclick="eseguiRicerca('TUTTI')">🔍 TUTTA LA FLOTTA</button><hr><button class="btn btn-light border" onclick="eseguiRicerca('Falco 27')">Solo Falco 27</button><button class="btn btn-light border" onclick="eseguiRicerca('Falco 28')">Solo Falco 28</button><button class="btn btn-light border" onclick="eseguiRicerca('Falco 29')">Solo Falco 29</button><button class="btn btn-light border" onclick="eseguiRicerca('Falco 30')">Solo Falco 30</button><button class="btn btn-light border" onclick="eseguiRicerca('Falco 31')">Solo Falco 31</button></div></div></div></div></div>
+    
+    <div class="modal fade" id="modalRisultati" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content"><div class="modal-header bg-dark text-white"><h5 class="modal-title">Risultati Ricerca</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body p-0"><table class="table table-striped table-hover mb-0"><thead class="table-light"><tr><th>Mezzo</th><th>Data/Problema</th><th>Dettagli</th><th>Esito</th></tr></thead><tbody id="tabellaRisultati"></tbody></table></div></div></div></div>
+    
+    <div class="modal fade" id="modalModificaStorico" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header bg-info text-white"><h5 class="title fw-bold">Modifica Record</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="modifica-id-record"><input type="hidden" id="modifica-mezzo"><div class="row g-3"><div class="col-12"><h6 class="border-bottom pb-2">Dati Apertura</h6></div><div class="col-md-4"><label class="info-label">Data Segnalazione</label><input type="text" class="form-control form-control-sm" id="modifica-data-segn"></div><div class="col-md-4"><label class="info-label">Op/Tipo</label><input type="text" class="form-control form-control-sm" id="modifica-op-segn"></div><div class="col-md-4"><label class="info-label">Km</label><input type="number" class="form-control form-control-sm" id="modifica-km"></div><div class="col-12"><label class="info-label">Categoria</label><select class="form-select form-select-sm" id="modifica-categoria"><option value="Meccanica">Meccanica</option><option value="Elettrica">Elettrica</option><option value="Carrozzeria">Carrozzeria</option><option value="Pneumatici">Pneumatici</option><option value="Sanitaria">Sanitaria</option><option value="Altro">Altro</option></select></div><div class="col-12"><textarea class="form-control form-control-sm border-warning" id="modifica-problema"></textarea></div><div class="col-12 mt-3"><h6 class="border-bottom pb-2">Dati Gestione</h6></div><div class="col-md-4"><label class="info-label">Data Ingresso</label><input type="text" class="form-control form-control-sm" id="modifica-data-ingr"></div><div class="col-md-4"><label class="info-label">Officina</label><input type="text" class="form-control form-control-sm" id="modifica-officina"></div><div class="col-md-4"><label class="info-label">Portato Da</label><input type="text" class="form-control form-control-sm" id="modifica-consegna"></div><div class="col-12 mt-3"><h6 class="border-bottom pb-2">Dati Chiusura</h6></div><div class="col-md-4"><label class="info-label">Data Chiusura</label><input type="text" class="form-control form-control-sm" id="modifica-data-chius"></div><div class="col-md-4"><label class="info-label">Ritirato Da</label><input type="text" class="form-control form-control-sm" id="modifica-ritiro"></div><div class="col-12"><textarea class="form-control form-control-sm border-success" id="modifica-intervento"></textarea></div></div></div><div class="modal-footer justify-content-between"><button type="button" class="btn btn-outline-danger" onclick="eliminaRecordStorico()">ELIMINA</button><div><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button><button type="button" class="btn btn-info text-white fw-bold" onclick="salvaModificaStorico()">Salva</button></div></div></div></div></div>
+    
+    <div class="modal fade" id="modalOpzioniDati" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-secondary text-white"><h5 class="modal-title fw-bold">Backup</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="d-grid gap-3"><button class="btn btn-primary w-100" onclick="esportaDati()">SCARICA ARCHIVIO</button><div class="p-3 border rounded bg-light"><input type="file" id="fileInput" class="form-control mb-2" accept=".json"><button class="btn btn-success w-100" onclick="importaDati()">CARICA</button></div></div></div></div></div></div>
+
+    <div class="modal fade" id="modalInserimentoPassato" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold">
+                        <i class="fas fa-history me-2"></i>Inserisci Vecchio Intervento (Archivio)
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                
+                <div class="modal-body bg-light">
+                    <form id="formVecchioIntervento">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="info-label">Veicolo</label>
+                                <select class="form-select fw-bold" id="old-mezzo">
+                                    <option value="Falco 27">Falco 27 (Automedica)</option>
+                                    <option value="Falco 28">Falco 28 (Ambulanza)</option>
+                                    <option value="Falco 29">Falco 29 (Ambulanza)</option>
+                                    <option value="Falco 30">Falco 30 (Ambulanza)</option>
+                                    <option value="Falco 31">Falco 31 (Ambulanza)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="info-label">Data Segnalazione/Guasto</label>
+                                <input type="date" class="form-control" id="old-data-apertura">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="info-label">Km (al guasto)</label>
+                                <input type="number" class="form-control" id="old-km" placeholder="Es. 150000">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="info-label">Categoria</label>
+                                <select class="form-select" id="old-categoria">
+                                    <option value="Meccanica">Meccanica</option>
+                                    <option value="Elettrica">Elettrica</option>
+                                    <option value="Carrozzeria">Carrozzeria</option>
+                                    <option value="Pneumatici">Pneumatici</option>
+                                    <option value="Sanitaria">Sanitaria</option>
+                                    <option value="Altro">Altro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="info-label">Operatore Segnalante</label>
+                                <input type="text" class="form-control" id="old-operatore" placeholder="Nome Cognome">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="info-label">Descrizione Guasto / Problema</label>
+                            <textarea class="form-control border-danger" id="old-problema" rows="3"></textarea>
+                        </div>
+
+                        <hr class="border-secondary opacity-50">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-tools text-secondary me-2"></i>
+                            <h6 class="text-uppercase fw-bold text-secondary m-0">Dati Risoluzione (Officina)</h6>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="info-label">Officina Esecutrice</label>
+                                <input type="text" class="form-control" id="old-officina" placeholder="Es. Reggini">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="info-label">Data Chiusura Intervento</label>
+                                <input type="date" class="form-control fw-bold" id="old-data-chiusura">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="info-label">Lavori Eseguiti / Intervento</label>
+                            <textarea class="form-control border-success" id="old-intervento" rows="3" placeholder="Descrizione della riparazione effettuata..."></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-success fw-bold" onclick="salvaVecchioIntervento()">
+                        <i class="fas fa-save me-2"></i>SALVA IN ARCHIVIO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalManualeUtente" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-book-reader me-2"></i>Guida all'Utilizzo: Gestionale Manutenzione Veicoli
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body p-4" style="font-size: 1.05rem; line-height: 1.7; background-color: #f8f9fa;">
+                
+                <p class="lead">Questa guida spiega come inserire nuove segnalazioni di guasto, gestire il ciclo di riparazione (dall'attesa alla chiusura), come funziona il sistema di notifica email e come consultare o popolare l'archivio storico.</p>
+                <hr>
+
+                <h4 class="text-primary mt-4"><i class="fas fa-plus-circle me-2"></i>1. Creare una Nuova Segnalazione</h4>
+                <p>La prima operazione da compiere quando si rileva un problema su un mezzo è l'inserimento della segnalazione.</p>
+                
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Posizione:</strong> Vai nel riquadro in alto a sinistra intitolato <span class="badge bg-primary">Segnalazione Guasto
+Scheda di Intervento Tecnico</span>.</li>
+                            <li><strong>Compilazione Campi:</strong>
+                                <ul>
+                                    <li><em>Mezzo:</em> Seleziona il veicolo dal menu a tendina.</li>
+                                    <li><em>Operatore:</em> Seleziona il tuo nome.</li>
+                                    <li><em>Categoria:</em> Indica il tipo di problema (es. Meccanica, Elettrico).</li>
+                                    <li><em>Descrizione:</em> Scrivi nel dettaglio il problema riscontrato.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Invio:</strong> Clicca sul pulsante verde <strong>"INVIA SEGNALAZIONE"</strong>.</li>
+                        </ul>
+                        <div class="alert alert-info py-2">
+                            <i class="fas fa-info-circle me-1"></i> La segnalazione apparirà subito in "Mezzi in Attesa" e verrà generata l'email automatica.
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-primary mt-4"><i class="fas fa-tasks me-2"></i>2. Gestire la Segnalazione (Flusso di Lavoro)</h4>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-white border rounded h-100">
+                            <h5 class="text-warning text-dark-shadow"><i class="fas fa-clock"></i> Fase A: Mezzi in Attesa</h5>
+                            <p class="small text-muted">Veicoli guasti ma non ancora in officina.</p>
+                            <ul>
+                                <li><strong>Azione:</strong> Quando porti il mezzo, clicca su <span class="badge bg-primary">MANDA IN OFFICINA</span>.</li>
+                                <li><strong>Inserisci:</strong> Chi porta il mezzo, Nome Officina, Data.</li>
+                                <li><strong>Risultato:</strong> La scheda si sposta nella colonna "In Officina".</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-white border rounded h-100">
+                            <h5 class="text-info text-dark-shadow"><i class="fas fa-wrench"></i> Fase B: Mezzi in Officina</h5>
+                            <p class="small text-muted">Veicoli attualmente in riparazione.</p>
+                            <ul>
+                                <li><strong>Azione:</strong> Quando ritiri il mezzo, clicca su <span class="badge bg-success">CHIUDI SEGNALAZIONE</span>.</li>
+                                <li><strong>Inserisci:</strong> Chi ritira, Data ritiro, Lavori eseguiti.</li>
+                                <li><strong>Risultato:</strong> La scheda finisce nello Storico.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-primary mt-4"><i class="fas fa-envelope me-2"></i>3. Utilizzo delle Email</h4>
+                <div class="alert alert-light border shadow-sm">
+                    <p>Il sistema prepara automaticamente la bozza dell'email nel tuo programma di posta predefinito quando invii una segnalazione.</p>
+                    <ul>
+                        <li><strong>Destinatario:</strong> Economato</li>
+                        <li><strong>Oggetto e Testo:</strong> Precompilati con i dati inseriti.</li>
+                    </ul>
+                    <div class="alert alert-warning border-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i><strong>NB:</strong> Quando apri una segnalazione, è opportuno cliccare anche su <strong>"Invia email a tutti gli operatori"</strong> (se presente) per informare i colleghi della situazione del veicolo.
+                    </div>
+                </div>
+
+                <h4 class="text-primary mt-4"><i class="fas fa-history me-2"></i>4. Consultare lo Storico</h4>
+                <p>Scorrendo la pagina in basso trovi la tabella con tutte le riparazioni passate.</p>
+                <ul>
+                    <li><strong>Filtra:</strong> Usa il menu a tendina per vedere solo un mezzo specifico.</li>
+                    <li><strong>Archivio Manuale:</strong> Se devi inserire una riparazione vecchia non presente, usa il pulsante <span class="badge bg-secondary">CARICA VECCHIO INTERVENTO</span> o <span class="badge bg-secondary">AGGIUNGI INTERVENTO</span>.</li>
+                </ul>
+
+            </div>
+            
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">Ho Capito, Chiudi Guida</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
